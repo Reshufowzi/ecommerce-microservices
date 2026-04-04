@@ -7,16 +7,10 @@ pipeline {
     }
 
     environment {
-        DOCKER_HUB = "your-dockerhub-username"
+        DOCKER_HUB = "reshma0209"
     }
 
     stages {
-
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/your-repo/ecommerce-microservices.git'
-            }
-        }
 
         stage('Build Services') {
             steps {
