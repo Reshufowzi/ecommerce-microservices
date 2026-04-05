@@ -8,6 +8,7 @@ pipeline {
 
     environment {
         DOCKER_HUB = "reshma0209"
+        TAG = "${BUILD_NUMBER}"   // 🔥 dynamic tag
     }
 
     stages {
@@ -31,11 +32,11 @@ pipeline {
 
         stage('Build Docker Images') {
             steps {
-                sh 'docker build -t $DOCKER_HUB/user-service ./user-service'
-                sh 'docker build -t $DOCKER_HUB/product-service ./product-service'
-                sh 'docker build -t $DOCKER_HUB/cart-service ./cart-service'
-                sh 'docker build -t $DOCKER_HUB/payment-service ./payment-service'
-                sh 'docker build -t $DOCKER_HUB/frontend ./frontend'
+                sh 'docker build -t $DOCKER_HUB/user-service:$TAG ./user-service'
+                sh 'docker build -t $DOCKER_HUB/product-service:$TAG ./product-service'
+                sh 'docker build -t $DOCKER_HUB/cart-service:$TAG ./cart-service'
+                sh 'docker build -t $DOCKER_HUB/payment-service:$TAG ./payment-service'
+                sh 'docker build -t $DOCKER_HUB/frontend:$TAG ./frontend'
             }
         }
 
@@ -48,11 +49,11 @@ pipeline {
 
                     sh 'echo $PASS | docker login -u $USER --password-stdin'
 
-                    sh 'docker push $DOCKER_HUB/user-service'
-                    sh 'docker push $DOCKER_HUB/product-service'
-                    sh 'docker push $DOCKER_HUB/cart-service'
-                    sh 'docker push $DOCKER_HUB/payment-service'
-                    sh 'docker push $DOCKER_HUB/frontend'
+                    sh 'docker push $DOCKER_HUB/user-service:$TAG'
+                    sh 'docker push $DOCKER_HUB/product-service:$TAG'
+                    sh 'docker push $DOCKER_HUB/cart-service:$TAG'
+                    sh 'docker push $DOCKER_HUB/payment-service:$TAG'
+                    sh 'docker push $DOCKER_HUB/frontend:$TAG'
                 }
             }
         }
