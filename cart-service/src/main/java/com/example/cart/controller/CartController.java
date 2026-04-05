@@ -1,18 +1,28 @@
+package com.example.cart.controller;
+
+import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+
+import java.util.List;
+
 @RestController
 @RequestMapping("/cart")
 public class CartController {
 
     @Autowired
-    private RedisTemplate<String, Object> redis;
+    private RedisTemplate<String, Object> redisTemplate;
 
-    @PostMapping("/add")
-    public String add(@RequestParam String user, @RequestParam String item) {
-        redis.opsForList().rightPush(user, item);
+    @PostMapping
+    public String addToCart(@RequestParam String userId,
+                           @RequestParam String product) {
+
+        redisTemplate.opsForList().rightPush(userId, product);
         return "Added";
     }
 
-    @GetMapping("/{user}")
-    public List<Object> get(@PathVariable String user) {
-        return redis.opsForList().range(user, 0, -1);
+    @GetMapping("/{userId}")
+    public List<Object> getCart(@PathVariable String userId) {
+        return redisTemplate.opsForList().range(userId, 0, -1);
     }
 }
