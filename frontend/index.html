@@ -1,20 +1,126 @@
-<h1>E-Commerce</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>E-Commerce Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f7f7f7;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        section {
+            margin-bottom: 30px;
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        button {
+            padding: 8px 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        li {
+            padding: 5px 0;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>E-Commerce Dashboard</h1>
 
-<button onclick="loadProducts()">Products</button>
-<ul id="list"></ul>
+    <section>
+        <h2>Users</h2>
+        <button onclick="loadUsers()">Load Users</button>
+        <ul id="usersList"></ul>
+    </section>
+
+    <section>
+        <h2>Products</h2>
+        <button onclick="loadProducts()">Load Products</button>
+        <ul id="productsList"></ul>
+    </section>
+
+    <section>
+        <h2>Payments</h2>
+        <button onclick="loadPayments()">Load Payments</button>
+        <ul id="paymentsList"></ul>
+    </section>
+
+    <section>
+        <h2>Carts</h2>
+        <button onclick="loadCarts()">Load Carts</button>
+        <ul id="cartsList"></ul>
+    </section>
 
 <script>
-function loadProducts() {
- fetch("http://localhost:8082/products")
- .then(res => res.json())
- .then(data => {
-   let list = document.getElementById("list");
-   list.innerHTML="";
-   data.forEach(p=>{
-     let li=document.createElement("li");
-     li.innerText=p.name + " - " + p.price;
-     list.appendChild(li);
-   });
- });
+const apiUrls = {
+    users: 'http://localhost:8081/users',
+    products: 'http://localhost:8082/products',
+    payments: 'http://localhost:8083/payments',
+    carts: 'http://localhost:8084/carts'
+};
+
+async function loadUsers() {
+    const res = await fetch(apiUrls.users);
+    const data = await res.json();
+    const list = document.getElementById('usersList');
+    list.innerHTML = '';
+    data.forEach(u => {
+        const li = document.createElement('li');
+        li.innerText = `${u.id} - ${u.name} (${u.email})`;
+        list.appendChild(li);
+    });
+}
+
+async function loadProducts() {
+    const res = await fetch(apiUrls.products);
+    const data = await res.json();
+    const list = document.getElementById('productsList');
+    list.innerHTML = '';
+    data.forEach(p => {
+        const li = document.createElement('li');
+        li.innerText = `${p.id} - ${p.name} : $${p.price}`;
+        list.appendChild(li);
+    });
+}
+
+async function loadPayments() {
+    const res = await fetch(apiUrls.payments);
+    const data = await res.json();
+    const list = document.getElementById('paymentsList');
+    list.innerHTML = '';
+    data.forEach(pay => {
+        const li = document.createElement('li');
+        li.innerText = `Payment ${pay.id} - User ${pay.userId} - Amount $${pay.amount}`;
+        list.appendChild(li);
+    });
+}
+
+async function loadCarts() {
+    const res = await fetch(apiUrls.carts);
+    const data = await res.json();
+    const list = document.getElementById('cartsList');
+    list.innerHTML = '';
+    data.forEach(c => {
+        const li = document.createElement('li');
+        li.innerText = `Cart ${c.id} - User ${c.userId} - Products: ${c.products.map(p=>p.name).join(', ')}`;
+        list.appendChild(li);
+    });
 }
 </script>
+</body>
+</html>
