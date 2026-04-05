@@ -1,3 +1,7 @@
+package com.example.payment.entity;
+
+import jakarta.persistence.*;
+
 @Entity
 public class Payment {
 
@@ -5,7 +9,8 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String user;
-    private double amount;
     private String status;
+    private double amount;
+
+    // getters & setters
 }
